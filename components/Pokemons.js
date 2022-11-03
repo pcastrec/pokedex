@@ -12,6 +12,13 @@ export const Pokemons = () => {
     const [loading, setLoading] = React.useState(false)
     const [pokemons, setPokemons] = React.useState([])
     const [settings, setSettings] = React.useState({ limit: 20, offset: 0 })
+ 
+    const handleObserver = React.useCallback(entries => {
+        if (entries[0].isIntersecting) {
+            console.log('loading')
+            setSettings(prev => ({ limit: 20, offset: prev.offset + 20 }))
+        }
+    }, [loading])
 
     React.useEffect(() => {
         const options = { root: null, rootMargin: "20px", threshold: 0 }
@@ -27,13 +34,6 @@ export const Pokemons = () => {
             .catch(err => console.log(err))
             .finally(() => setLoading(false))
     }, [settings])
-
-    const handleObserver = React.useCallback(entries => {
-        if (entries[0].isIntersecting) {
-            console.log('loading')
-            setSettings(prev => ({ limit: 20, offset: prev.offset + 20 }))
-        }
-    }, [loading])
 
     return (
         <>
